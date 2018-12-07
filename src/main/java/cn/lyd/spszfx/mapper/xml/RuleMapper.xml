@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lyd.spszfx.mapper.RuleMapper" >
+  <resultMap id="BaseResultMap" type="cn.lyd.spszfx.pojo.Rule" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="project" property="project" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="BIT" />
+    <result column="featureextramethon" property="featureextramethon" jdbcType="BIGINT" />
+    <result column="redCoefficient" property="redcoefficient" jdbcType="REAL" />
+    <result column="greenCoefficient" property="greencoefficient" jdbcType="REAL" />
+    <result column="blueCoefficient" property="bluecoefficient" jdbcType="REAL" />
+    <result column="correct" property="correct" jdbcType="REAL" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, project, type, featureextramethon, redCoefficient, greenCoefficient, blueCoefficient, 
+    correct, memo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from rule
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByProjectID" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from rule
+    where project = #{project_id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from rule
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.lyd.spszfx.pojo.Rule" >
+    insert into rule (id, name, project, 
+      type, featureextramethon, redCoefficient, 
+      greenCoefficient, blueCoefficient, correct, 
+      memo)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{project,jdbcType=BIGINT}, 
+      #{type,jdbcType=BIT}, #{featureextramethon,jdbcType=BIGINT}, #{redcoefficient,jdbcType=REAL}, 
+      #{greencoefficient,jdbcType=REAL}, #{bluecoefficient,jdbcType=REAL}, #{correct,jdbcType=REAL}, 
+      #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.lyd.spszfx.pojo.Rule" >
+    insert into rule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="project != null" >
+        project,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="featureextramethon != null" >
+        featureextramethon,
+      </if>
+      <if test="redcoefficient != null" >
+        redCoefficient,
+      </if>
+      <if test="greencoefficient != null" >
+        greenCoefficient,
+      </if>
+      <if test="bluecoefficient != null" >
+        blueCoefficient,
+      </if>
+      <if test="correct != null" >
+        correct,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="project != null" >
+        #{project,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=BIT},
+      </if>
+      <if test="featureextramethon != null" >
+        #{featureextramethon,jdbcType=BIGINT},
+      </if>
+      <if test="redcoefficient != null" >
+        #{redcoefficient,jdbcType=REAL},
+      </if>
+      <if test="greencoefficient != null" >
+        #{greencoefficient,jdbcType=REAL},
+      </if>
+      <if test="bluecoefficient != null" >
+        #{bluecoefficient,jdbcType=REAL},
+      </if>
+      <if test="correct != null" >
+        #{correct,jdbcType=REAL},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.lyd.spszfx.pojo.Rule" >
+    update rule
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="project != null" >
+        project = #{project,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=BIT},
+      </if>
+      <if test="featureextramethon != null" >
+        featureextramethon = #{featureextramethon,jdbcType=BIGINT},
+      </if>
+      <if test="redcoefficient != null" >
+        redCoefficient = #{redcoefficient,jdbcType=REAL},
+      </if>
+      <if test="greencoefficient != null" >
+        greenCoefficient = #{greencoefficient,jdbcType=REAL},
+      </if>
+      <if test="bluecoefficient != null" >
+        blueCoefficient = #{bluecoefficient,jdbcType=REAL},
+      </if>
+      <if test="correct != null" >
+        correct = #{correct,jdbcType=REAL},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.lyd.spszfx.pojo.Rule" >
+    update rule
+    set name = #{name,jdbcType=VARCHAR},
+      project = #{project,jdbcType=BIGINT},
+      type = #{type,jdbcType=BIT},
+      featureextramethon = #{featureextramethon,jdbcType=BIGINT},
+      redCoefficient = #{redcoefficient,jdbcType=REAL},
+      greenCoefficient = #{greencoefficient,jdbcType=REAL},
+      blueCoefficient = #{bluecoefficient,jdbcType=REAL},
+      correct = #{correct,jdbcType=REAL},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
