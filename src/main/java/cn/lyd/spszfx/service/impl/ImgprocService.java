@@ -33,17 +33,12 @@ public class ImgprocService implements IImgprocService {
     private FeatureExtraction featureExtraction;//后期可能需要动态注入实现类
 
     @Override
-    public List<Check> extractFeatures(BufferedImage buffImg,Long project_id,int minPeakDistance,double loUpDiff,double threshold) {
+    public List<Check> extractFeatures(Mat frame,Long project_id,int minPeakDistance,double loUpDiff,double threshold) {
 
-        Mat frame = TypeConversionUtil.BufImg2Mat(buffImg,buffImg.getType(),CvType.CV_8UC3);
+
         return toDo(frame,project_id,minPeakDistance,loUpDiff,threshold);
     }
 
-    @Override
-    public List<Check> extractFeatures(String imgPath,Long project_id,int minPeakDistance,double loUpDiff,double threshold) {
-        Mat frame = IOUtil.readImg(imgPath);
-        return toDo(frame,project_id,minPeakDistance,loUpDiff,threshold);
-    }
 
     @Override
     public List<Check> extractFeaturesFromSamples(String samples_path,Long project_id,int minPeakDistance,double loUpDiff,double threshold) {
