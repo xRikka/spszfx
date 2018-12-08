@@ -113,4 +113,21 @@ public class Check {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Check{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", project=" + project +
+                ", featureextramethon=" + featureextramethon +
+                ", rule=" + rule +
+                ", red=" + red +
+                ", green=" + green +
+                ", blue=" + blue +
+                ", gray=" + gray +
+                ", result=" + result +
+                ", memo='" + memo + '\'' +
+                '}';
+    }
 }

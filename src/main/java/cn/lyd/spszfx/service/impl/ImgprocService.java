@@ -34,8 +34,6 @@ public class ImgprocService implements IImgprocService {
 
     @Override
     public List<Check> extractFeatures(Mat frame,Long project_id,int minPeakDistance,double loUpDiff,double threshold) {
-
-
         return toDo(frame,project_id,minPeakDistance,loUpDiff,threshold);
     }
 
@@ -52,8 +50,8 @@ public class ImgprocService implements IImgprocService {
 
     private List<Check> toDo(Mat frame,Long project_id,int minPeakDistance,double loUpDiff,double threshold){
         Mat roi = rectRegionalDetection.toDo(frame);
-        Mat corrected_roi = horizontalCorrection.degree(roi);
-        RGBFeature feature = featureExtraction.extract(frame,minPeakDistance,loUpDiff,threshold);
+        //Mat corrected_roi = horizontalCorrection.degree(roi);
+        RGBFeature feature = featureExtraction.extract(roi,minPeakDistance,loUpDiff,threshold);
         Map<String,int[]> features = feature.getFeatures();
         Map<String,Float> grayOfFeatures = feature.getGrayOfFeatures();
         if(!features.isEmpty()){

@@ -14,5 +14,6 @@ public interface IMachineLearningService {
     public void saveProjectRule(Long project_id,Rule rule);
     public void updateProjectRule(Long project_id,Rule rule);
     public List<Rule> findRuleByProject(Long project_id);
+    public Rule findRuleByKey(Long rule_id);
 
 }

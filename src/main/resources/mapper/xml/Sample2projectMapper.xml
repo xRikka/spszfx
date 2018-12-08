@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lyd.spszfx.mapper.Sample2projectMapper" >
+  <resultMap id="BaseResultMap" type="cn.lyd.spszfx.pojo.Sample2project" >
+    <id column="sample" property="sample" jdbcType="BIGINT" />
+    <id column="project" property="project" jdbcType="BIGINT" />
+    <result column="result" property="result" jdbcType="REAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sample, project, result
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.lyd.spszfx.pojo.Sample2projectKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from sample2project
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.lyd.spszfx.pojo.Sample2projectKey" >
+    delete from sample2project
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.lyd.spszfx.pojo.Sample2project" >
+    insert into sample2project (sample, project, result
+      )
+    values (#{sample,jdbcType=BIGINT}, #{project,jdbcType=BIGINT}, #{result,jdbcType=REAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.lyd.spszfx.pojo.Sample2project" >
+    insert into sample2project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sample != null" >
+        sample,
+      </if>
+      <if test="project != null" >
+        project,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sample != null" >
+        #{sample,jdbcType=BIGINT},
+      </if>
+      <if test="project != null" >
+        #{project,jdbcType=BIGINT},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.lyd.spszfx.pojo.Sample2project" >
+    update sample2project
+    <set >
+      <if test="result != null" >
+        result = #{result,jdbcType=REAL},
+      </if>
+    </set>
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.lyd.spszfx.pojo.Sample2project" >
+    update sample2project
+    set result = #{result,jdbcType=REAL}
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+  </update>
+</mapper>

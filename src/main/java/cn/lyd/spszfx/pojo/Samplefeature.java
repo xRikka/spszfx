@@ -63,4 +63,16 @@ public class Samplefeature extends SamplefeatureKey {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Samplefeature{" +
+                "name='" + name + '\'' +
+                ", red=" + red +
+                ", green=" + green +
+                ", blue=" + blue +
+                ", gray=" + gray +
+                ", memo='" + memo + '\'' +
+                '}';
+    }
 }

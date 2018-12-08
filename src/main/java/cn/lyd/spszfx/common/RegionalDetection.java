@@ -110,10 +110,8 @@ public abstract class RegionalDetection implements IDetection{
             new_p[1] = img.rows() - ((points[i].x - centor.x) * sinv + (py- cy) * cosv + cy);
             new_points[i] = new Point(new_p);
         }
-
         rotated_images.add(rotatedMat);
-        cutROIImg(rotatedMat,new_points,rotRect);
-        return rotatedMat;
+        return cutROIImg(rotatedMat,new_points,rotRect);
     }
     /**
      * 执行区域提取操作 具体方法

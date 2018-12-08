@@ -34,4 +34,13 @@ public class Sample {
     public void setTime(Date time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "Sample{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", time=" + time +
+                '}';
+    }
 }

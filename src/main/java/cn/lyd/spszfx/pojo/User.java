@@ -43,4 +43,14 @@ public class User {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", memo='" + memo + '\'' +
+                '}';
+    }
 }

@@ -37,6 +37,7 @@ public class RectRegionalDetection extends RegionalDetection {
             ImgUtil.drawROIRect(im_rect,points);
             im_roi = rotatedImgForRect(im_rect,rotRect);//矫正旋转矩形,截取感兴趣区域
         }
+        writeToLocal();
         return im_roi;
     }
 

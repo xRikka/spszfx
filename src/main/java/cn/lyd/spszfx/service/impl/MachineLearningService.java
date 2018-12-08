@@ -76,4 +76,9 @@ public class MachineLearningService implements IMachineLearningService {
         return ruleMapper.selectByProjectID(project_id);
     }
 
+    @Override
+    public Rule findRuleByKey(Long rule_id) {
+        return ruleMapper.selectByPrimaryKey(rule_id);
+    }
+
 }

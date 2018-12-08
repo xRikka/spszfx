@@ -23,4 +23,12 @@ public class Sample2projectKey {
     public void setProject(Long project) {
         this.project = project;
     }
+
+    @Override
+    public String toString() {
+        return "Sample2projectKey{" +
+                "sample=" + sample +
+                ", project=" + project +
+                '}';
+    }
 }

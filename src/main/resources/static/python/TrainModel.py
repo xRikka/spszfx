@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy
 import matplotlib.pyplot as plt
-from python.InitRGBData import *
+from InitRGBData import *
 
 class TensorFlow_TrainModel:
     # 训练数据
@@ -54,7 +54,7 @@ class TensorFlow_TrainModel:
             training_cost = sess.run(cost, feed_dict={X: self.train_X, Y: self.train_Y})
             print("Training cost=", "{:.9f}".format(training_cost), "W=", sess.run(W), "b=", sess.run(b), '\n')
 
-            saver.save(sess,rootPath+"/out_saver_model/model.ckpt")
+            saver.save(sess,"out_saver_model/model.ckpt")
             output_graph_def = tf.graph_util.convert_variables_to_constants(sess, sess.graph_def, output_node_names=['X','Y','weight','pred','bias'])
-            with tf.gfile.FastGFile(rootPath+"/out_saver_model/model.pb", mode='wb') as f:
+            with tf.gfile.FastGFile("out_saver_model/model.pb", mode='wb') as f:
                 f.write(output_graph_def.SerializeToString())

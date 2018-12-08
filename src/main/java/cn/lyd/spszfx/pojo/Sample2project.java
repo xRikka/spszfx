@@ -13,4 +13,11 @@ public class Sample2project extends Sample2projectKey {
     public void setResult(Float result) {
         this.result = result;
     }
+
+    @Override
+    public String toString() {
+        return "Sample2project{" +
+                "result=" + result +
+                '}';
+    }
 }

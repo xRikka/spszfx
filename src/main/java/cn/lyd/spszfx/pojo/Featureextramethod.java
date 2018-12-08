@@ -33,4 +33,13 @@ public class Featureextramethod {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Featureextramethod{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", memo='" + memo + '\'' +
+                '}';
+    }
 }

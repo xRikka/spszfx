@@ -4,6 +4,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,14 @@ public class RGBFeature {
     private Mat src;
     private List<int[]> RGBList;
     private int type;
+
+    public RGBFeature(){
+        features = new HashMap<>();
+        grayOfFeatures = new HashMap<>();
+        src = new Mat();
+        RGBList = new ArrayList<>();
+        type = 3;
+    }
 
     public Map<String, int[]> getFeatures() {
         return features;

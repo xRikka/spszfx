@@ -23,7 +23,7 @@ public class TensorFlowModel implements ITensorflowModel {
     protected Graph graph;
     protected Tensor input_x = null;
     protected float[] w;
-    protected float b;
+    protected float b = (float)0.1;
 
     public TensorFlowModel(){
         init("");
@@ -56,8 +56,13 @@ public class TensorFlowModel implements ITensorflowModel {
             //相当于TensorFlow Python中的sess.run(z,feed_dict = {'x': 10.0})
             Tensor tensor_w = session.runner()
                     .fetch("weight").run().get(0);
-            this.w = (float[]) tensor_w.copyTo(new float[(int)tensor_w.shape()[0]]);
+            float[][] temp_w = (float[][]) tensor_w.copyTo(new float[(int)tensor_w.shape()[0]][1]);
+            //this.w = new float[]{temp_w[0][0],temp_w[1][0],temp_w[2][0]};
+            this.w = new float[(int)tensor_w.shape()[0]];
+            for(int i = 0;i < temp_w.length;i++)
+                this.w[i] = temp_w[i][0];
             this.b = session.runner().fetch("bias").run().get(0).floatValue();
+            int debug = 0;
         }
     }
     @Override

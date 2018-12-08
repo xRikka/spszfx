@@ -103,4 +103,20 @@ public class Rule {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", project=" + project +
+                ", type=" + type +
+                ", featureextramethon=" + featureextramethon +
+                ", redcoefficient=" + redcoefficient +
+                ", greencoefficient=" + greencoefficient +
+                ", bluecoefficient=" + bluecoefficient +
+                ", correct=" + correct +
+                ", memo='" + memo + '\'' +
+                '}';
+    }
 }

@@ -33,4 +33,13 @@ public class Project {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", memo='" + memo + '\'' +
+                '}';
+    }
 }

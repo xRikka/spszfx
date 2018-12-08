@@ -33,4 +33,13 @@ public class SamplefeatureKey {
     public void setFeatureextramethod(Long featureextramethod) {
         this.featureextramethod = featureextramethod;
     }
+
+    @Override
+    public String toString() {
+        return "SamplefeatureKey{" +
+                "sample=" + sample +
+                ", project=" + project +
+                ", featureextramethod=" + featureextramethod +
+                '}';
+    }
 }

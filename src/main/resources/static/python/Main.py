@@ -1,6 +1,6 @@
 import sys
-from python.TrainModel import *
-from python.InitRGBData import *
+from TrainModel import *
+from InitRGBData import *
 
 def main(list_x,list_y):
     trainModel = TensorFlow_TrainModel(list_x,list_y)

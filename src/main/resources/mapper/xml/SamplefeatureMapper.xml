@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lyd.spszfx.mapper.SamplefeatureMapper" >
+  <resultMap id="BaseResultMap" type="cn.lyd.spszfx.pojo.Samplefeature" >
+    <id column="sample" property="sample" jdbcType="BIGINT" />
+    <id column="project" property="project" jdbcType="BIGINT" />
+    <id column="featureextramethod" property="featureextramethod" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="red" property="red" jdbcType="INTEGER" />
+    <result column="green" property="green" jdbcType="INTEGER" />
+    <result column="blue" property="blue" jdbcType="INTEGER" />
+    <result column="gray" property="gray" jdbcType="REAL" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sample, project, featureextramethod, name, red, green, blue, gray, memo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="cn.lyd.spszfx.pojo.SamplefeatureKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from samplefeature
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+      and featureextramethod = #{featureextramethod,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKeySelective" resultMap="BaseResultMap" parameterType="cn.lyd.spszfx.pojo.SamplefeatureKey" >
+    select
+    <include refid="Base_Column_List" />
+    from samplefeature
+    <where>
+      <if test="sample != null ">sample=#{sample,jdbcType=BIGINT}</if>
+      <if test="project != null" >and project=#{project,jdbcType=BIGINT}</if>
+      <if test="featureextramethod != null">and featureextramethod = #{featureextramethod,jdbcType=BIGINT}</if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.lyd.spszfx.pojo.SamplefeatureKey" >
+    delete from samplefeature
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+      and featureextramethod = #{featureextramethod,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.lyd.spszfx.pojo.Samplefeature" >
+    insert into samplefeature (sample, project, featureextramethod, 
+      name, red, green, blue, 
+      gray, memo)
+    values (#{sample,jdbcType=BIGINT}, #{project,jdbcType=BIGINT}, #{featureextramethod,jdbcType=BIGINT}, 
+      #{name,jdbcType=VARCHAR}, #{red,jdbcType=INTEGER}, #{green,jdbcType=INTEGER}, #{blue,jdbcType=INTEGER}, 
+      #{gray,jdbcType=REAL}, #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.lyd.spszfx.pojo.Samplefeature" >
+    insert into samplefeature
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sample != null" >
+        sample,
+      </if>
+      <if test="project != null" >
+        project,
+      </if>
+      <if test="featureextramethod != null" >
+        featureextramethod,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="red != null" >
+        red,
+      </if>
+      <if test="green != null" >
+        green,
+      </if>
+      <if test="blue != null" >
+        blue,
+      </if>
+      <if test="gray != null" >
+        gray,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sample != null" >
+        #{sample,jdbcType=BIGINT},
+      </if>
+      <if test="project != null" >
+        #{project,jdbcType=BIGINT},
+      </if>
+      <if test="featureextramethod != null" >
+        #{featureextramethod,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="red != null" >
+        #{red,jdbcType=INTEGER},
+      </if>
+      <if test="green != null" >
+        #{green,jdbcType=INTEGER},
+      </if>
+      <if test="blue != null" >
+        #{blue,jdbcType=INTEGER},
+      </if>
+      <if test="gray != null" >
+        #{gray,jdbcType=REAL},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.lyd.spszfx.pojo.Samplefeature" >
+    update samplefeature
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="red != null" >
+        red = #{red,jdbcType=INTEGER},
+      </if>
+      <if test="green != null" >
+        green = #{green,jdbcType=INTEGER},
+      </if>
+      <if test="blue != null" >
+        blue = #{blue,jdbcType=INTEGER},
+      </if>
+      <if test="gray != null" >
+        gray = #{gray,jdbcType=REAL},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+      and featureextramethod = #{featureextramethod,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.lyd.spszfx.pojo.Samplefeature" >
+    update samplefeature
+    set name = #{name,jdbcType=VARCHAR},
+      red = #{red,jdbcType=INTEGER},
+      green = #{green,jdbcType=INTEGER},
+      blue = #{blue,jdbcType=INTEGER},
+      gray = #{gray,jdbcType=REAL},
+      memo = #{memo,jdbcType=VARCHAR}
+    where sample = #{sample,jdbcType=BIGINT}
+      and project = #{project,jdbcType=BIGINT}
+      and featureextramethod = #{featureextramethod,jdbcType=BIGINT}
+  </update>
+</mapper>

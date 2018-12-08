@@ -12,7 +12,7 @@ def readData():
         for line in fi.readlines():
             strLine = line.strip()
             strLineSplit = strLine.split(" ")
-            rgb_arr = list([int(n_str) for n_str in strLineSplit[0][1:-1].split(",")])
+            rgb_arr = list([float(n_str) for n_str in strLineSplit[0][1:-1].split(",")])
             list_x.append(rgb_arr)
             tag = float(strLineSplit[1][strLineSplit[1].find("=")+1:])
             list_y.append([tag])
@@ -20,10 +20,10 @@ def readData():
 def format(X, Y):
     strXSplit = X.split("\n")
     for rgb_str in strXSplit:
-        rgb_arr = list([int(n_str) for n_str in rgb_str.split(" ")])
+        rgb_arr = list([float(n_str) for n_str in rgb_str.split(" ")])
         list_x.append(rgb_arr)
-    global list_y
-    list_y = list([int(n_str) for n_str in Y.split("\n")])
+    for n_str in Y.split("\n"):
+        list_y.append([float(n_str)])
 
 def readTestData():
     list_test_x = list()
