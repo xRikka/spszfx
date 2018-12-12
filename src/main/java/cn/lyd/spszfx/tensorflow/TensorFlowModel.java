@@ -1,9 +1,12 @@
 package cn.lyd.spszfx.tensorflow;
 
 import cn.lyd.spszfx.common.ITensorflowModel;
+import cn.lyd.spszfx.initializer.ApplicationStartInitializer;
 import cn.lyd.spszfx.util.FeatureDataUtil;
 import cn.lyd.spszfx.util.TypeConversionUtil;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.tensorflow.Graph;
 import org.tensorflow.Session;
@@ -18,6 +21,8 @@ import java.util.List;
 
 @Component
 public class TensorFlowModel implements ITensorflowModel {
+
+    private static final Logger logger = LoggerFactory.getLogger(TensorFlowModel.class);
 
     protected String model_path = FeatureDataUtil.SAVER_MODEL_PATH + "model.pb";
     protected Graph graph;
@@ -102,7 +107,7 @@ public class TensorFlowModel implements ITensorflowModel {
         BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
         String line;
         while ((line = in.readLine()) != null) {
-            System.out.println("python line:" + line);
+            logger.info("python line:" + line);
         }
         in.close();
         pr.waitFor();

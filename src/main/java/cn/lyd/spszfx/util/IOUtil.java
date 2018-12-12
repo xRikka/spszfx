@@ -3,6 +3,7 @@ package cn.lyd.spszfx.util;
 import org.opencv.core.Mat;
 import org.tensorflow.op.core.Batch;
 import static org.opencv.imgcodecs.Imgcodecs.imread;
+import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -49,6 +50,10 @@ public class IOUtil {
 
     public static Mat readImg(String path){
         return imread(path);
+    }
+
+    public static boolean writeImg(String path,Mat mat){
+        return imwrite(path,mat);
     }
 
 }

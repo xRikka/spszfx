@@ -42,8 +42,10 @@ public class ImgprocService implements IImgprocService {
     public List<Check> extractFeaturesFromSamples(String samples_path,Long project_id,int minPeakDistance,double loUpDiff,double threshold) {
         List<Mat> samples = IOUtil.readBatchImg(samples_path);
         List<Check> checks = new ArrayList<>();
+        List<Check> checksOfOne = null;
         for(Mat frame : samples){
-            checks.addAll(toDo(frame,project_id,minPeakDistance,loUpDiff,threshold));
+            if ((checksOfOne = toDo(frame,project_id,minPeakDistance,loUpDiff,threshold)) != null)
+                checks.addAll(checksOfOne);
         }
         return checks.size() > 0 ? checks:null;
     }

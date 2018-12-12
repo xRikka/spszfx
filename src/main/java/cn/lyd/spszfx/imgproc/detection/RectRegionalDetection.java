@@ -20,7 +20,7 @@ public class RectRegionalDetection extends RegionalDetection {
      * @return
      */
     public Mat toDo(Mat frame) {
-        Mat im_rect = new Mat();//旋转矩形
+        Mat im_rect;//旋转矩形
         Mat im_roi = null;//矫正后矩形
         //图片尺寸统一化
         frame = ImgUtil.img_resize(frame);
@@ -36,8 +36,11 @@ public class RectRegionalDetection extends RegionalDetection {
             //绘制旋转矩形框
             ImgUtil.drawROIRect(im_rect,points);
             im_roi = rotatedImgForRect(im_rect,rotRect);//矫正旋转矩形,截取感兴趣区域
+            //释放内存
+            //im_rect.release();
         }
-        writeToLocal();
+
+        //writeToLocal();
         return im_roi;
     }
 

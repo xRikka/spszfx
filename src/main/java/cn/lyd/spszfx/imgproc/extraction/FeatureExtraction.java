@@ -1,5 +1,6 @@
 package cn.lyd.spszfx.imgproc.extraction;
 
+import cn.lyd.spszfx.common.IExtraction;
 import cn.lyd.spszfx.model.RGBFeature;
 import cn.lyd.spszfx.util.TypeConversionUtil;
 import org.opencv.core.*;
@@ -8,6 +9,7 @@ import org.opencv.imgproc.Imgproc;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,11 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class FeatureExtraction {
+public class FeatureExtraction implements IExtraction {
 
     @Resource
     private RGBFeature feature;
-
     private Mat grayMatOfRGBList;
 
 
@@ -120,7 +121,7 @@ public class FeatureExtraction {
         }
     }
 
-    public void localPeakOfFeature(int minPeakDistance,double loUpDiff,double threshold) {
+    private void localPeakOfFeature(int minPeakDistance,double loUpDiff,double threshold) {
         List<Integer> localPeaks = new ArrayList<>();
         int slide_size = minPeakDistance;
         int start = 0;

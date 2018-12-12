@@ -35,7 +35,7 @@ public class HorizontalCorrection implements ICorrection {
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3,3));
         //Imgproc.erode(threshImage,kernelImage,kernel);
         Imgproc.dilate(threshImage,kernelImage,kernel);
-        imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGH_CANNY.jpg",kernelImage);
+        //imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGH_CANNY.jpg",kernelImage);
         int ht = HOUGH_THRESHOLD;
         Imgproc.HoughLines(kernelImage,Lines,1,Math.PI / 180,ht);
         while(Lines.rows() <= 0 && ht > 0){
@@ -77,10 +77,10 @@ public class HorizontalCorrection implements ICorrection {
         Point centor = new Point(src.cols() / 2,src.rows() / 2);
         Mat affineTians = Imgproc.getRotationMatrix2D(centor,angle,1);
         Imgproc.warpAffine(houghLinesTemp,degreeImage,affineTians,degreeImage.size(),Imgproc.INTER_NEAREST);
-        imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGHLINES_DEGREE.jpg",degreeImage);
+        //imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGHLINES_DEGREE.jpg",degreeImage);
         Imgproc.warpAffine(src,degreeImage,affineTians,degreeImage.size(),Imgproc.INTER_NEAREST);
-        imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGH.jpg",houghLinesTemp);
-        imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGH_DEGREE.jpg",degreeImage);
+        //imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGH.jpg",houghLinesTemp);
+        //imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGH_DEGREE.jpg",degreeImage);
         return degreeImage;
 
     }

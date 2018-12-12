@@ -14,7 +14,9 @@ import cn.lyd.spszfx.util.IOUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,17 +39,19 @@ public class FeatureTest {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        File dir = new File("src/main/resources/static/images/temp");
-        File[] filesList = dir.listFiles();
-        Mat mat = null;
-        for(int i = 0;i< 100;i++){
-            for(File f : filesList){
-                mat = imread(f.getPath());
-                imwrite(f.getPath(),mat);
-                mat.release();
-            }
-            System.out.println(i);
-        }
+        //File f = new File("static/images/subimages/IMG_roi_0.jpg");
+        Mat src = imread("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_0.jpg");
+        Mat gray = new Mat();
+        Mat det = new Mat();
+        int threshold = 10;
+        //System.out.println();
+        Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
+        Imgproc.medianBlur(gray,det,5);
+        Imgproc.Canny(det,det,threshold,threshold * 3);
+        //Imgproc.Sobel(src,det,src.depth(),1,0);
+        imwrite("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_1.jpg",det);
+
+
 
         /*
         RectRegionDetection rd = new RectRegionDetection(new CannyEdgeDetector());
@@ -153,6 +157,20 @@ public class FeatureTest {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+    @Test
+    public void test2(){
+        File dir = new File("src/main/resources/static/images/temp");
+        File[] filesList = dir.listFiles();
+        Mat mat = null;
+        for(int i = 0;i< 100;i++){
+            for(File f : filesList){
+                mat = imread(f.getPath());
+                imwrite(f.getPath(),mat);
+                mat.release();
+            }
+            System.out.println(i);
         }
     }
 }
