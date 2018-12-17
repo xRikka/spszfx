@@ -96,6 +96,82 @@ public class ImgUtil {
     }
 
     /**
+     * 图像白平衡处理--灰度世界算法
+     * @param src
+     * @return
+     */
+    public static Mat whiteBalance_grayWorld(Mat src){
+        List<Mat> mv = new ArrayList<>();
+        Mat dst = new Mat();
+        Core.split(src,mv);
+        Mat b_channel = mv.get(0);
+        Mat g_channel = mv.get(1);
+        Mat r_channel = mv.get(2);
+        double b_channel_avg = Core.mean(b_channel).val[0];
+        double g_channel_avg = Core.mean(g_channel).val[0];
+        double r_channel_avg = Core.mean(r_channel).val[0];
+        double k = (b_channel_avg+g_channel_avg+r_channel_avg) / 3;
+        double kb = k/b_channel_avg;
+        double kg = k/g_channel_avg;
+        double kr = k/r_channel_avg;
+        Core.addWeighted(b_channel,kg,b_channel,0,0,b_channel);
+        Core.merge(mv,dst);
+        IOUtil.writeImg("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\whiteBalance\\01.jpg",dst);
+        return dst;
+    }
+
+    /**
+     * 1、求取源图I的平均灰度，并记录rows和cols；
+     *
+     * 2、按照一定大小，分为N*M个方块，求出每块的平均值，得到子块的亮度矩阵D；
+     *
+     * 3、用矩阵D的每个元素减去源图的平均灰度，得到子块的亮度差值矩阵E；
+     *
+     * 4、用双立方差值法，将矩阵E差值成与源图一样大小的亮度分布矩阵R；
+     *
+     * 5、得到矫正后的图像result=I-R；
+     *
+     * 其中blockSize建议取值32
+     * @param src
+     * @param blockSize
+     * @return
+     */
+    public static Mat lightingCompensation(Mat src,int blockSize){
+
+        if (src.channels() == 3)
+            Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2GRAY);
+        double average = Core.mean(src).val[0];//源图像的亮度（灰度）均值
+        int rows_new = (int)Math.ceil((double)src.rows() / blockSize);
+        int cols_new = (int)Math.ceil((double)src.cols() / blockSize);
+        Mat blockImage;
+        blockImage = Mat.zeros(rows_new, cols_new, CvType.CV_8UC1);
+        for (int i = 0; i < rows_new; i++)
+        {
+            for (int j = 0; j < cols_new; j++)
+            {
+                int rowmin = i*blockSize;
+                int rowmax = (i + 1)*blockSize;
+                if (rowmax > src.rows()) rowmax = src.rows();
+                int colmin = j*blockSize;
+                int colmax = (j + 1)*blockSize;
+                if (colmax > src.cols()) colmax = src.cols();
+                Mat imageROI = src.submat(new Range(rowmin, rowmax), new Range(colmin, colmax));
+                double temaver = Core.mean(imageROI).val[0];//每个块矩阵的（亮度）灰度均值
+                blockImage.put(i,j,temaver);
+            }
+        }
+        Core.subtract(blockImage,new Scalar(average),blockImage);//亮点矩阵减去原图平均亮度
+        Mat blockImage2 = new Mat();
+        Imgproc.resize(blockImage, blockImage2, src.size());//缩放至原图大小
+        Mat image2 = new Mat();
+        src.convertTo(image2, CvType.CV_8UC1);
+        Mat dst = new Mat();
+        Core.subtract(image2,blockImage2,dst);
+        dst.convertTo(src, CV_8UC1);
+        return dst;
+    }
+
+    /**
      * 展示直方图
      * @param frame
      */

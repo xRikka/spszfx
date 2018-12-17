@@ -15,6 +15,8 @@ public abstract class RegionalDetection implements IDetection{
     protected EdgeDetector edgeDetector;
     protected List<Mat> roi_images;//保存截取得到的感兴趣区域
     protected List<Mat> rotated_images;//保存矫正后的图像
+    private final static int roi_width = 80;
+    private final static int roi_height = 900;
 
     public RegionalDetection() {
         this.edgeDetector = null;
@@ -68,6 +70,8 @@ public abstract class RegionalDetection implements IDetection{
         Arrays.sort(y_arr);
         int width = x_arr[x_arr.length - 1] - x_arr[0];
         int height = y_arr[y_arr.length - 1] - y_arr[0];
+        if(height < roi_height)
+            height = roi_height;
         //Mat roi_img = img.submat(new Range(x_arr[0],x_arr[x_arr.length - 1]),new Range(y_arr[0],y_arr[y_arr.length - 1]));
         Mat roi_img = new Mat(img,new Rect(x_arr[0],y_arr[0],width,height));
         roi_images.add(roi_img);
@@ -112,6 +116,33 @@ public abstract class RegionalDetection implements IDetection{
         }
         rotated_images.add(rotatedMat);
         return cutROIImg(rotatedMat,new_points,rotRect);
+    }
+
+    /**
+     * 感兴趣区域填充
+     * @param new_points
+     * @return
+     */
+    private Point[] roiFill(Point[] new_points){
+        int lt_index = 0;
+        int rb_index = 0;
+        Point[] points = new_points.clone();
+        for(int i = 0;i< points.length;i++){
+            if((int)points[lt_index].x >= (int)points[i].x && (int)points[lt_index].y >= (int)points[i].y){
+                lt_index = i;
+            }else if((int)points[rb_index].x <= (int)points[i].x && (int)points[rb_index].y <= (int)points[i].y){
+                rb_index = i;
+            }
+        }
+        double height = Math.abs(points[rb_index].y - points[lt_index].y);
+        if(height < roi_height){
+            double fill_height = roi_height - height;
+            for(Point point : points){
+                if((int)point.y == (int)points[rb_index].y)
+                    point.set(new double[]{point.x,point.y + fill_height});
+            }
+        }
+        return points;
     }
     /**
      * 执行区域提取操作 具体方法

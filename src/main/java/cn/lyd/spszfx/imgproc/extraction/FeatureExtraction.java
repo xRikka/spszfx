@@ -33,7 +33,7 @@ public class FeatureExtraction implements IExtraction {
 
     private void init() {
         this.grayMatOfRGBList = new Mat();
-
+        this.feature = new RGBFeature();
     }
 
     public RGBFeature extract(Mat src,int minPeakDistance,double loUpDiff,double threshold){
@@ -48,7 +48,7 @@ public class FeatureExtraction implements IExtraction {
             rowRange = img.rowRange(i, i + 1);
             clearEdgeBlack(rowRange);
             Scalar mean = Core.mean(rowRange);
-            double[] scalar_val = mean.val;
+            double[] scalar_val = BGR2RGB(mean.val);
             this.feature.getRGBList().add(TypeConversionUtil.arrOfdouble2int(scalar_val));
             mat_temp.put(0,i,TypeConversionUtil.Scalar2doubleByType(mean,type));
         }
@@ -173,6 +173,19 @@ public class FeatureExtraction implements IExtraction {
         }
         resetFeatures(localPeaks);
         //printRowsAvgRGB();
+    }
+
+    /**
+     * 将BGR顺序变换为RGB
+     * @param vals
+     * @return
+     */
+    private double[] BGR2RGB(double[] vals){
+        double[] RGB = vals.clone();
+        double r = RGB[2];
+        RGB[2] = RGB[0];
+        RGB[0] = r;
+        return RGB;
     }
 
     public Mat getGrayMatOfRGBList() {

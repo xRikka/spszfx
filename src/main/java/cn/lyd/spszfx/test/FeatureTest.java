@@ -40,16 +40,16 @@ public class FeatureTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         //File f = new File("static/images/subimages/IMG_roi_0.jpg");
-        Mat src = imread("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_0.jpg");
+        Mat src = IOUtil.readImg("/IDEAWorkspace/spszfx/src/main/resources/static/images/subimages/IMG_roi_0.jpg");
         Mat gray = new Mat();
         Mat det = new Mat();
         int threshold = 10;
-        //System.out.println();
-        Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
+        System.out.println(src.cols());
+       /* Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
         Imgproc.medianBlur(gray,det,5);
-        Imgproc.Canny(det,det,threshold,threshold * 3);
+        Imgproc.Canny(det,det,threshold,threshold * 3);*/
         //Imgproc.Sobel(src,det,src.depth(),1,0);
-        imwrite("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_1.jpg",det);
+        //imwrite("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_1.jpg",det);
 
 
 

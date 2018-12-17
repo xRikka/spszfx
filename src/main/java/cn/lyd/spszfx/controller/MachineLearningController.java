@@ -5,6 +5,7 @@ import cn.lyd.spszfx.pojo.Sample2projectKey;
 import cn.lyd.spszfx.pojo.SamplefeatureKey;
 import cn.lyd.spszfx.service.IImgprocService;
 import cn.lyd.spszfx.service.IMachineLearningService;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,17 +36,17 @@ public class MachineLearningController {
         return null;
     }
     @RequestMapping(value = "/{project_id}/save",method = RequestMethod.POST)
-    public Rule saveProjectRule(Long project_id,Rule rule){
+    public Rule saveProjectRule(@PathVariable Long project_id,Rule rule){
         machineLearningService.saveProjectRule(project_id,rule);
         return rule;
     }
     @RequestMapping(value = "/{project_id}/update",method = RequestMethod.POST)
-    public Rule updateProjectRule(Long project_id,Rule rule){
+    public Rule updateProjectRule(@PathVariable Long project_id, Rule rule){
         machineLearningService.updateProjectRule(project_id,rule);
         return rule;
     }
     @RequestMapping(value = "/{project_id}/get",method = RequestMethod.GET)
-    public List<Rule> findRuleByProject(Long project_id){
+    public List<Rule> findRuleByProject(@PathVariable Long project_id){
         return machineLearningService.findRuleByProject(project_id);
     }
 

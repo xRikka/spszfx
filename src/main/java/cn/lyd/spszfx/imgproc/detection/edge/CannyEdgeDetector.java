@@ -38,6 +38,10 @@ public class CannyEdgeDetector extends EdgeDetector {
         Mat mask;
         // 灰度化
         Imgproc.cvtColor(frame, grayImage, Imgproc.COLOR_BGR2GRAY);
+        //直方图均衡化
+        //Imgproc.equalizeHist(grayImage,grayImage);
+        //光照补偿
+        //grayImage = ImgUtil.lightingCompensation(grayImage,32);
         // 滤波降噪
         // 均值
         //Imgproc.blur(grayImage, detectedEdges, new Size(9, 9));
@@ -45,9 +49,11 @@ public class CannyEdgeDetector extends EdgeDetector {
         //Mat sbImage = new Mat();
         //Imgproc.bilateralFilter(grayImage,detectedEdges,25,25*2,25/2);
         //中值
-        Imgproc.medianBlur(grayImage,detectedEdges,blur_size);
+        Imgproc.medianBlur(grayImage,grayImage,blur_size);
+        //高斯
+        //Imgproc.GaussianBlur(grayImage,grayImage,new Size(blur_size,blur_size),0);
         // Canny算子边缘检测
-        Imgproc.Canny(detectedEdges, detectedEdges, edge_threshold, edge_threshold * 3);
+        Imgproc.Canny(grayImage, detectedEdges, edge_threshold, edge_threshold * 3);
         //二值化
         Imgproc.threshold(detectedEdges,threshImage,ImgUtil.BINARY_THRESHOLD, 255,Imgproc.THRESH_BINARY);
         //形态学操作
@@ -86,7 +92,7 @@ public class CannyEdgeDetector extends EdgeDetector {
         kernel.release();
         temp.release();
         mask.release();
-
+*/
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_temimage"+count+".jpg",temimage);
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_gray"+count+".jpg",grayImage);
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_detectedEdges"+count+".jpg",detectedEdges);
@@ -94,7 +100,7 @@ public class CannyEdgeDetector extends EdgeDetector {
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_thresh"+count+".jpg",threshImage);
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_erode"+count+".jpg",erodeImage);
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_dilateImage"+count+".jpg",dilateImage);
-        count++;*/
+        count++;
         //writeImg();//输出过程img
         if(contours.size() > 0){
             return true;
