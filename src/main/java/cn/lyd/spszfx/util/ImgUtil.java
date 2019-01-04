@@ -221,4 +221,65 @@ public class ImgUtil {
 
     }
 
+    /**
+     * RGB直方图平衡化
+     * @param src
+     * @return
+     */
+    public static Mat RGBEqualizeHist(Mat src){
+        List<Mat> mv = new ArrayList<>();
+        Mat dst = new Mat();
+        Core.split(src,mv);
+        for(Mat channel : mv){
+            Imgproc.equalizeHist(channel,channel);
+        }
+        Core.merge(mv,dst);
+        return dst;
+    }
+
+    /**
+     * 调整均值列表 1 水平 2 背景光照趋于150
+     * @param RGBList
+     * @return
+     */
+    public static List<int[]> RGBHorizontalCorrection(List<Integer> grayList,List<int[]> RGBList){
+        int backgroundColor = 150;
+        double ck;
+        double cb;
+        //计算整体斜率
+
+        List<Double> p2pKList = new ArrayList<>();
+        for(int i = 0;i < grayList.size() - 1;i++){
+            int x1 = grayList.get(i);
+            int x2 = grayList.get(i+1);
+            /*
+            double k = 斜率(x1,x2);
+            p2pKList.add(k);
+             */
+        }
+        //获取背景RGB（将特征线区域除去）
+        List<Integer> backgroundList = new ArrayList<>();
+        for(int i = 0;i < p2pKList.size();i++){
+            /*
+            if(isBackground(p2pKList.get(i))){
+                backgroundList.add(grayList.get(i*2));
+            }
+            */
+        }
+        //计算水平矫正ck
+        /*
+            ck = getCk(p2pKList);
+        */
+        //计算背景RGB均值
+        /*
+            cb = getCb(backgroundColor,avg(backgroundList));
+        */
+        //计算背景差值 = 背景RGB均值 - backgroundColor
+
+        //调整背景光照趋于150 ：new = src - 背景差值
+
+        //返回new
+        return null;
+    }
+
 }
