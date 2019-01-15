@@ -2,6 +2,7 @@ package cn.lyd.spszfx.imgproc.extraction;
 
 import cn.lyd.spszfx.common.IExtraction;
 import cn.lyd.spszfx.model.RGBFeature;
+import cn.lyd.spszfx.util.ImgUtil;
 import cn.lyd.spszfx.util.TypeConversionUtil;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;

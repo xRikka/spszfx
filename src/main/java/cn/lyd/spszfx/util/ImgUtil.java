@@ -114,7 +114,9 @@ public class ImgUtil {
         double kb = k/b_channel_avg;
         double kg = k/g_channel_avg;
         double kr = k/r_channel_avg;
-        Core.addWeighted(b_channel,kg,b_channel,0,0,b_channel);
+        Core.addWeighted(b_channel,kb,b_channel,0,0,b_channel);
+        Core.addWeighted(g_channel,kg,g_channel,0,0,g_channel);
+        Core.addWeighted(r_channel,kr,r_channel,0,0,r_channel);
         Core.merge(mv,dst);
         IOUtil.writeImg("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\whiteBalance\\01.jpg",dst);
         return dst;
@@ -182,7 +184,7 @@ public class ImgUtil {
         Mat hist_b = images.get(0);
         Mat hist_g = images.get(1);
         Mat hist_r = images.get(2);
-        int hist_w = 400; // width of the histogram image
+        int hist_w = 1000; // width of the histogram image
         int hist_h = 400; // height of the histogram image
         int bin_w = (int) Math.round(hist_w / histSize.get(0, 0)[0]);
         Mat histImage = new Mat(hist_h, hist_w, CvType.CV_8UC3, new Scalar(0, 0, 0));
@@ -206,7 +208,7 @@ public class ImgUtil {
      */
     public static void showGrayMatOfRGBListHistogram(Mat frame) {
         MatOfInt histSize = new MatOfInt(256);
-        int hist_w = 400; // width of the histogram image
+        int hist_w = 1000; // width of the histogram image
         int hist_h = 400; // height of the histogram image
         int bin_w = (int) Math.round(hist_w / histSize.get(0, 0)[0]);
         Mat histImage = new Mat(hist_h, hist_w, CvType.CV_8UC3, new Scalar(0, 0, 0));
@@ -279,6 +281,78 @@ public class ImgUtil {
         //调整背景光照趋于150 ：new = src - 背景差值
 
         //返回new
+        return null;
+    }
+
+    public static Mat brightness(Mat src){
+/*
+            Mat src = imread( "F:\\my\\head_src_2.jpg" );
+            imshow( "原始图片" ,src);
+            Mat dst=src.clone();
+            ////////////////////////////////////////////////////////////////////////// Face detection in color images
+            //////////////////////////////////////////////////////////////////////////根据高光区域直方图计算进行光线补偿
+                 const float thresholdco = 0.05;
+                 const int thresholdnum = 100;
+
+            int histogram[256] = {0};
+            for(int i=0;i<dst.rows;i++)
+            {
+                for(int j=0;j<dst.cols;j++)
+                {
+                    int b = dst.at<Vec3b>(i,j)[0];
+                    int g = dst.at<Vec3b>(i,j)[1];
+                    int r = dst.at<Vec3b>(i,j)[2];
+                    //计算灰度值
+                    int gray = (r*299+g*587+b*114)/1000;
+                    histogram[gray]++;
+                }
+            }
+
+            int calnum =0;
+            int total = dst.rows * dst.cols ;
+            int num;
+            //下面的循环得到满足系数thresholdco的临界灰度级
+            for(int i =0;i<256;i++)
+            {
+                if((float )calnum/total < thresholdco) //得到前5%的高亮像素。
+                {
+                    calnum+= histogram[255-i];//histogram保存的是某一灰度值的像素个数,calnum是边界灰度之上的像素数
+                    num = i;
+                }
+                else
+                    break;
+            }
+            int averagegray = 0;
+            calnum =0;
+            //得到满足条件的象素总的灰度值
+            for(int i = 255;i>=255-num;i--)
+            {
+                averagegray += histogram[i]*i; //总的像素的个数*灰度值
+                calnum += histogram[i]; //总的像素数
+            }
+            averagegray /=calnum;
+            //得到光线补偿的系数
+            float co = 255.0/(float )averagegray;
+
+            for(int i=0;i<dst.rows;i++)
+            {
+                for(int j=0;j<dst.cols;j++)
+                {
+                    dst.at<Vec3b>(i,j)[0]= CLAMP0255(co*dst.at<Vec3b>(i,j)[0]+0.5);
+                    dst.at<Vec3b>(i,j)[1]=CLAMP0255(co*dst.at<Vec3b>(i,j)[1]+0.5);
+                    dst.at<Vec3b>(i,j)[2]=CLAMP0255(co*dst.at<Vec3b>(i,j)[2]+0.5);
+
+                }
+            }
+            imshow( "Face detection in color images" ,dst);
+
+
+
+
+            cv::waitKey();
+            return 0;
+
+*/
         return null;
     }
 
