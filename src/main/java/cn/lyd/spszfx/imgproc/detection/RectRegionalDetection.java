@@ -25,7 +25,7 @@ public class RectRegionalDetection extends RegionalDetection {
         //图片尺寸统一化
         frame = ImgUtil.img_resize(frame);
         //图片白平衡化处理
-        frame = ImgUtil.whiteBalance_grayWorld(frame);
+        //frame = ImgUtil.whiteBalance_grayWorld(frame);
         if(edgeDetector.doDetect(frame)){//轮廓提取
             List<MatOfPoint> contours =  edgeDetector.getContours();
             RotatedRect rotRect = getMaxRotatedRect(contours);//一般最大内面积的连通域就是想要的ROI

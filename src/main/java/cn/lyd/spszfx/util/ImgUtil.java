@@ -240,6 +240,27 @@ public class ImgUtil {
     }
 
     /**
+     * 对数变换
+     *  对数图像增强是图像增强的一种常见方法，其公式为： S = c log(r+1)，其中c是常数（以下算法c=255/(log(256)），这样可以实现整个画面的亮度增大此时默认v=e，即 S = c ln(r+1)。
+     *  对数使亮度比较低的像素转换成亮度比较高的，而亮度较高的像素则几乎没有变化，这样就使图片整体变亮。
+     * @param src
+     * @return
+     */
+    public static Mat lightingCompensation(Mat src){
+        double c = 255 / Math.log(256);
+        Mat dst = Mat.zeros(src.size(),src.type());
+        Core.add(src,new Scalar(1,1,1),dst);
+        src.convertTo(src, CvType.CV_32F);
+        Core.log(src,dst);
+        Core.multiply(dst,new Scalar(c,c,c),dst);
+        //归一化到0~255
+        Core.normalize(dst,dst,0,255,Core.NORM_MINMAX);
+        //转换成8bit图像显示
+        Core.convertScaleAbs(dst,dst);
+        return dst;
+    }
+
+    /**
      * 调整均值列表 1 水平 2 背景光照趋于150
      * @param RGBList
      * @return

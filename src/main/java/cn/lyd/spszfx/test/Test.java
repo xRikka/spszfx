@@ -104,7 +104,9 @@ public class Test {
         int r = (int)(150 - light_avg.val[0]);
         Scalar light_r = new Scalar(r,r,r);
         Core.add(roi,light_r,dst);
-
+        //光照补偿
+        //dst = ImgUtil.lightingCompensation(dst);//对数变换
+        //dst = ImgUtil.lightingCompensation(dst,5);
         return featureExtraction.extract(dst, minPeakDistance, loUpDiff, threshold);
     }
 }
