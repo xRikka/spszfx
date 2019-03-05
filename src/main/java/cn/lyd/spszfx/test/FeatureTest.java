@@ -40,11 +40,11 @@ public class FeatureTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         //File f = new File("static/images/subimages/IMG_roi_0.jpg");
-        Mat src = IOUtil.readImg("/IDEAWorkspace/spszfx/src/main/resources/static/images/subimages/IMG_roi_0.jpg");
+        /*Mat src = IOUtil.readImg("/IDEAWorkspace/spszfx/src/main/resources/static/images/subimages/IMG_roi_0.jpg");
         Mat gray = new Mat();
         Mat det = new Mat();
         int threshold = 10;
-        System.out.println(src.cols());
+        System.out.println(src.cols());*/
        /* Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
         Imgproc.medianBlur(gray,det,5);
         Imgproc.Canny(det,det,threshold,threshold * 3);*/
@@ -66,16 +66,19 @@ public class FeatureTest {
         FeatureExtraction fe = new FeatureExtraction(img);
         fe.LocalPeakOfFeature(200,30,150);
         Map map = fe.getFoodRGB();*/
-        //TensorFlowModel tfModel = new TensorFlowModel(FeatureDataUtil.SAVER_MODEL_PATH+"model.pb");
-        /*tfModel.setInput_x(Tensor.create(FeatureDataUtil.readTestData()));
+        Map<String,Object> map = FeatureDataUtil.readTrainDataFeatures();
+        List<int[]> list_x = (ArrayList<int[]>)map.get("X");
+        List<Float> list_y = (ArrayList<Float>)map.get("Y");
+        TensorFlowModel tfModel = new TensorFlowModel(FeatureDataUtil.SAVER_MODEL_PATH+"model.pb");
+        tfModel.execute(list_x, list_y);
+        tfModel.setInput_x(Tensor.create(FeatureDataUtil.readTestData()));
         Tensor preds = tfModel.run();
         float[][] preds_arr = (float[][]) preds.copyTo(new float[(int)preds.shape()[0]][1]);
         System.out.println("result :");
         for (float[] pred : preds_arr){
             System.out.println(pred[0]);
-        }*/
-        /*tfModel.execute(new ArrayList<int[]>(){{add(new int[]{110,100,115});add(new int[]{113,104,118});add(new int[]{101,89,98});}},
-                new ArrayList<Float>(){{add((float) 0.33);add((float) 0.35);add((float) 0.31);}});*/
+        }
+
 
     }
 
