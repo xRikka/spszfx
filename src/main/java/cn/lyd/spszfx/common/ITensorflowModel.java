@@ -10,7 +10,7 @@ public interface ITensorflowModel {
 
     public Tensor run();
 
-    public Tensor run(List<int[]> x);
+    public Tensor run(List<float[]> x);
 
     public void execute(List<int[]> x, List<Float> y) throws IOException, InterruptedException;
 

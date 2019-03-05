@@ -71,8 +71,8 @@ public class TensorFlowModel implements ITensorflowModel {
         }
     }
     @Override
-    public Tensor run(List<int[]> x){
-        int[][] x_arr = FeatureDataUtil.listToArr2(x);
+    public Tensor run(List<float[]> x){
+        float[][] x_arr = FeatureDataUtil.listToArr2OfFloat(x);
         //根据图建立Session
         Tensor result = null;
         try(Session session = new Session(this.graph)){
