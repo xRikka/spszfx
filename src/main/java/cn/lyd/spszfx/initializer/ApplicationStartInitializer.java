@@ -12,7 +12,7 @@ public class ApplicationStartInitializer implements ApplicationContextInitialize
     @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
         logger.info("初始化OpenCV... ...");
-        //System.load("D:\\IDEAWorkspace\\spszfx\\opencv\\x64\\opencv_java341.dll");
+        //System.load("E:\\IdeaProjects\\spszfx\\opencv\\x64\\opencv_java341.dll");
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         logger.info("初始化OpenCV结束!");
     }

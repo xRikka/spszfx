@@ -49,7 +49,7 @@ public class FeatureTest {
         Imgproc.medianBlur(gray,det,5);
         Imgproc.Canny(det,det,threshold,threshold * 3);*/
         //Imgproc.Sobel(src,det,src.depth(),1,0);
-        //imwrite("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_1.jpg",det);
+        //imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_1.jpg",det);
 
 
 

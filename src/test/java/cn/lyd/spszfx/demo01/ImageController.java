@@ -19,8 +19,8 @@ public class ImageController {
     public static String TEST_POSS_IMAGE_PREFIX = "IMG_RE_01";
     public static String TEST_RES_IMAGE_PATHNAME = "IMG_RE_01.jpg";
     public static String TEST_RES_IMAGE_PATHNAME_ROTATED = "IMG_RE_01_rotated.jpg";
-    public static String TEST_IMAGE_PATH_FROM_TEST = "D:\\IDEAWorkspace\\spszfx\\src\\test\\resources\\images\\IMG_20181024_155534.jpg";
-    public static String TEST_IMAGE_PATH_FROM_TEST_ROTATED = "D:\\IDEAWorkspace\\spszfx\\src\\test\\resources\\images\\IMG_20181024_155534_01.jpg";
+    public static String TEST_IMAGE_PATH_FROM_TEST = "E:\\IdeaProjects\\spszfx\\src\\test\\resources\\images\\IMG_20181024_155534.jpg";
+    public static String TEST_IMAGE_PATH_FROM_TEST_ROTATED = "E:\\IdeaProjects\\spszfx\\src\\test\\resources\\images\\IMG_20181024_155534_01.jpg";
     public boolean CreateFile(File f) {
         if (!f.exists()) {
             try {

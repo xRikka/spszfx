@@ -1,2 +1,2 @@
-model_checkpoint_path: "D:\\IDEAWorkspace\\deeplearning_tensorflow\\src/out_saver_model/model.ckpt"
-all_model_checkpoint_paths: "D:\\IDEAWorkspace\\deeplearning_tensorflow\\src/out_saver_model/model.ckpt"
+model_checkpoint_path: "E:\\IdeaProjects\\deeplearning_tensorflow\\src/out_saver_model/model.ckpt"
+all_model_checkpoint_paths: "E:\\IdeaProjects\\deeplearning_tensorflow\\src/out_saver_model/model.ckpt"

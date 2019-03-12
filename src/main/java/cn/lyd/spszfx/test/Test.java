@@ -28,17 +28,23 @@ public class Test {
     }
 
     public static void main(String[] args){
-        System.load("D:\\IDEAWorkspace\\colorCheckServer\\colorCheckServer\\resources\\opencv\\x64\\opencv_java341.dll");
+        System.load("E:\\IdeaProjects\\spszfx\\opencv\\x64\\opencv_java341.dll");
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Test test = new Test();
+        test.test3();
+
+    }
+
+    public static void test1(){
+        Test test = new Test();
         //指定绝对路径
-        Mat src = IOUtil.readImg("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\src\\IMG_20181217_161811.jpg");
+        Mat src = IOUtil.readImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\src\\IMG_20181217_161811.jpg");
 //        Imgproc.cvtColor(src,src,Imgproc.COLOR_BGR2GRAY);
         //        Mat dst = ImgUtil.lightingCompensation(src,32);
 
         //Mat dst = ImgUtil.RGBEqualizeHist(src);
 
-        //Boolean sign = IOUtil.writeImg("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\temp\\test_01.jpg",dst);
+        //Boolean sign = IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\temp\\test_01.jpg",dst);
 //       // return;
 
         RGBFeature feature = test.toDo(src,200,30,150);
@@ -91,6 +97,23 @@ public class Test {
 
         }*/
 
+    }
+
+    public static void test2(){
+        Mat src = IOUtil.readImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\src\\IMG_20181217_151811.jpg");
+        Mat result = ImgUtil.kameans_getLinesMask(src,2,3);
+        int i = 0;
+        IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\kmeans_test01.jpg",result);
+//        System.out.println(src.rows() * src.cols());
+    }
+
+    public void test3(){
+        List<Mat> srcImgList = IOUtil.readBatchImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\src\\");
+
+        for(int i = 0;i < srcImgList.size();i++){
+            Mat mask = ImgUtil.kameans_getLinesMask(ImgUtil.averageBrightness(regionalDetection.toDo(srcImgList.get(i))),2,3);
+            IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\kmeans_test_"+i+".jpg",mask);
+        }
     }
 
 

@@ -118,7 +118,7 @@ public class ImgUtil {
         Core.addWeighted(g_channel,kg,g_channel,0,0,g_channel);
         Core.addWeighted(r_channel,kr,r_channel,0,0,r_channel);
         Core.merge(mv,dst);
-        IOUtil.writeImg("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\whiteBalance\\01.jpg",dst);
+        IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\whiteBalance\\01.jpg",dst);
         return dst;
     }
 
@@ -374,6 +374,67 @@ public class ImgUtil {
             return 0;
 
 */
+        return null;
+    }
+
+    //调整整体亮度趋于150
+    public static Mat  averageBrightness(Mat roi){
+        Mat dst = new Mat();
+        Imgproc.cvtColor(roi,dst,Imgproc.COLOR_BGR2GRAY);
+        Scalar light_avg = Core.mean(dst);
+        //平均亮度值与指定值的差值
+        int r = (int)(150 - light_avg.val[0]);
+        //设置亮度调整的beta值
+        Scalar light_r = new Scalar(r,r,r);
+        Core.add(roi,light_r,dst);
+        return dst;
+    }
+
+    public static Mat kameans_getLinesMask(Mat src,int clusterCount,int attempts){
+        Mat tmp = new Mat();
+        src.copyTo(tmp);
+        int rows = tmp.rows();
+        int cols = tmp.cols();
+        Scalar[] colorLabels = new Scalar[clusterCount];
+//        for(int i = 0;i < clusterCount;i++){
+//            colorLabels[i] = new Scalar(i+255);
+//        }
+        colorLabels[0] = new Scalar(0,255,0);
+        colorLabels[1] = new Scalar(255,0,255);
+        Mat data = new Mat(src.rows() * src.cols(),3,CvType.CV_32FC1);
+        Mat bestLabels = new Mat();
+        for(int i = 0;i < rows;i++){
+            for(int j = 0;j < cols;j++){
+                double[] sampleValue  = tmp.get(i,j);
+//                Mat sample = new Mat(1,3,data.type());
+//                sample.put(0,0,sampleValue[0]);
+//                sample.put(0,1,sampleValue[1]);
+//                sample.put(0,2,sampleValue[2]);
+//                data.push_back(sample);
+                data.put(i * cols + j,0,sampleValue[0]);
+                data.put(i * cols + j,1,sampleValue[1]);
+                data.put(i * cols + j,2,sampleValue[2]);
+                //System.out.println((i * cols + j)+" data:"+data.get(i * cols + j,0)[0] + ";;sample:" + sample.get(0,0)[0]);
+            }
+        }
+        System.out.println("开始聚类！");
+//        Mat centers = new Mat(clusterCount,1,data.type());
+        Core.kmeans(data,clusterCount,bestLabels,new TermCriteria(TermCriteria.EPS+TermCriteria.MAX_ITER,10,1.0)
+                ,attempts,Core.KMEANS_RANDOM_CENTERS);
+        int n = 0;
+        System.out.println("结束聚类，开始生成掩码矩阵！");
+        for(int i = 0;i < rows;i++){
+            for(int j = 0;j < cols;j++){
+                int clusterIndex = (int)bestLabels.get(i * cols + j,0)[0];
+                double[] colorLabel = colorLabels[clusterIndex].val;
+                tmp.put(i,j,colorLabel[0],colorLabel[1],colorLabel[2]);
+            }
+        }
+        System.out.println("生成掩码矩阵结束！");
+        return tmp;
+    }
+
+    public static Mat SegmentByWatershed(Mat src){
         return null;
     }
 

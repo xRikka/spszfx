@@ -23,10 +23,10 @@ public class Demo_byjc {
     /*width:height = 1:3*/
     private static int standard_width_cols = 1200;
     private static int standard_heigth_cols = 1600;
-    private static String PRINT_PATH_PREFIX = "D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\subimages\\";
-    private static String PRINT_ROTATED_PATH = "D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\rotatedimages\\";
-    private static String PRINT_TEMP_PATH = "D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\temp\\";
-    public static String PRINT_Hough_PATH = "D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\hough\\";
+    private static String PRINT_PATH_PREFIX = "E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\subimages\\";
+    private static String PRINT_ROTATED_PATH = "E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\rotatedimages\\";
+    private static String PRINT_TEMP_PATH = "E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\temp\\";
+    public static String PRINT_Hough_PATH = "E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\hough\\";
     private static String ROTATED_IMAGE_SAMPLE_PATH;
     private static String SUB_IMAGE_SAMPLE_PATH;
 
@@ -248,14 +248,14 @@ public class Demo_byjc {
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Demo_byjc byjc = new Demo_byjc();
-        File dir = new File("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\src");
+        File dir = new File("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\src");
         File[] filesList = dir.listFiles();
         for(File f : filesList){
             byjc.doCanny(imread(f.getPath()));
         }
         byjc.writeToLocal();
         HorizontalCorrection.HoughLinesDegree(byjc.sub_images.get(0),new Mat());
-        Mat img = imread("D:\\IDEAWorkspace\\spszfx\\src\\main\\resources\\static\\images\\hough\\HOUGH_DEGREE.jpg");
+        Mat img = imread("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\hough\\HOUGH_DEGREE.jpg");
         FeatureExtraction fe = new FeatureExtraction(img);
         fe.LocalPeakOfFeature(200,30,150);
 
