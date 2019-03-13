@@ -33,8 +33,8 @@ public class HorizontalCorrection implements ICorrection {
         Imgproc.threshold(detectedEdges,threshImage,ImgUtil.BINARY_THRESHOLD, 255,Imgproc.THRESH_BINARY);
         //形态学操作
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3,3));
-        //Imgproc.erode(threshImage,kernelImage,kernel);
-        Imgproc.dilate(threshImage,kernelImage,kernel);
+        //Imgproc.erode(threshImage,kernelImage,kernel);//腐蚀
+        Imgproc.dilate(threshImage,kernelImage,kernel);//膨胀
         //imwrite(IOUtil.IMAGE_Hough_PATH+"HOUGH_CANNY.jpg",kernelImage);
         int ht = HOUGH_THRESHOLD;
         Imgproc.HoughLines(kernelImage,Lines,1,Math.PI / 180,ht);

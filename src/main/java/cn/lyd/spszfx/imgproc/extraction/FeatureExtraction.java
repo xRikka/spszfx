@@ -44,6 +44,7 @@ public class FeatureExtraction implements IExtraction {
         Mat mat_temp = new Mat();
         int type = img.channels();
         feature.setType(type);
+        feature.getRGBList().clear();
         mat_temp.create(1,img.rows(),img.type());
         for (int i = 0; i < img.rows(); i++) {
             rowRange = img.rowRange(i, i + 1);

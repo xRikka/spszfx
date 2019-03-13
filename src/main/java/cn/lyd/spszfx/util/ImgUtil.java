@@ -434,6 +434,37 @@ public class ImgUtil {
         return tmp;
     }
 
+    public static Mat cleanBrightnessEffect(Mat src,Size kernelSize,Point anchor){
+        Mat gray = new Mat();
+        Mat threshold = new Mat();
+        Mat dst = new Mat();
+        Mat grayBackground =  new Mat();
+        //Point anchor = new Point(5,5);
+        Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
+        //Core.bitwise_not(gray,gray);
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_gray_0.jpg",gray);
+        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,kernelSize,anchor);
+        //Imgproc.erode(gray,grayBackground,kernel,anchor,10);
+        Imgproc.dilate(gray,grayBackground,kernel,anchor,10);
+        //Core.bitwise_not(grayBackground,grayBackground);
+        //imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_dilate_0.jpg",grayBackground);
+        //Imgproc.blur(grayBackground,grayBackground,new Size(4,4),anchor);
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_grayBackGround_0.jpg",grayBackground);
+        Scalar avgBrightness = Core.mean(grayBackground);
+        Core.subtract(grayBackground,avgBrightness,grayBackground);
+
+        //Imgproc.morphologyEx(gray,grayBackground,Imgproc.MORPH_OPEN,kernel);
+        //Imgproc.erode(grayBackground,grayBackground,kernel);
+        //Imgproc.dilate(grayBackground,grayBackground,kernel);
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_grayBackGround_1.jpg",grayBackground);
+        Core.subtract(gray,grayBackground,dst);
+        //Core.add(gray,grayBackground,dst);
+        Imgproc.threshold(dst,threshold,10,255,Imgproc.THRESH_BINARY);
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_threshold_0.jpg",threshold);
+        return dst;
+
+    }
+
     public static Mat SegmentByWatershed(Mat src){
         return null;
     }
