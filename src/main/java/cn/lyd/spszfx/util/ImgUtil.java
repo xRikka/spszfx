@@ -457,10 +457,9 @@ public class ImgUtil {
         //Imgproc.erode(grayBackground,grayBackground,kernel);
         //Imgproc.dilate(grayBackground,grayBackground,kernel);
         imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_grayBackGround_1.jpg",grayBackground);
-        Core.subtract(gray,grayBackground,dst);
-        //Core.add(gray,grayBackground,dst);
-        Imgproc.threshold(dst,threshold,10,255,Imgproc.THRESH_BINARY);
-        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_threshold_0.jpg",threshold);
+        //Core.subtract(gray,grayBackground,dst);
+        Imgproc.cvtColor(grayBackground,grayBackground,Imgproc.COLOR_GRAY2BGR);
+        Core.subtract(src,grayBackground,dst);
         return dst;
 
     }
