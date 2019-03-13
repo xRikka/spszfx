@@ -399,8 +399,8 @@ public class ImgUtil {
 //        for(int i = 0;i < clusterCount;i++){
 //            colorLabels[i] = new Scalar(i+255);
 //        }
-        colorLabels[0] = new Scalar(0,255,0);
-        colorLabels[1] = new Scalar(255,0,255);
+        colorLabels[0] = new Scalar(0,0,0);
+        colorLabels[1] = new Scalar(255,255,255);
         Mat data = new Mat(src.rows() * src.cols(),3,CvType.CV_32FC1);
         Mat bestLabels = new Mat();
         for(int i = 0;i < rows;i++){
@@ -418,9 +418,15 @@ public class ImgUtil {
             }
         }
         System.out.println("开始聚类！");
-//        Mat centers = new Mat(clusterCount,1,data.type());
+//        Mat centers = new Mat(clusterCount,3,data.type());
+//        centers.put(0,0,150);
+//        centers.put(0,1,150);
+//        centers.put(0,2,150);
+//        centers.put(1,0,0);
+//        centers.put(1,1,0);
+//        centers.put(1,2,0);
         Core.kmeans(data,clusterCount,bestLabels,new TermCriteria(TermCriteria.EPS+TermCriteria.MAX_ITER,10,1.0)
-                ,attempts,Core.KMEANS_RANDOM_CENTERS);
+                ,attempts,Core.KMEANS_PP_CENTERS);
         int n = 0;
         System.out.println("结束聚类，开始生成掩码矩阵！");
         for(int i = 0;i < rows;i++){
@@ -434,32 +440,42 @@ public class ImgUtil {
         return tmp;
     }
 
+    /**
+     * 处理图片光照不均问题
+     * 分两个步骤：
+     * 1，对较亮区域进行降光处理，较暗区域基本不变
+     * 2，反转原图片，对较暗区域进行光照补偿，较亮区域基本不变
+     * @param src 原图片
+     * @param kernelSize 内核尺寸
+     * @param anchor 内核中心点
+     * @return 消除光照影响后的图片
+     */
     public static Mat cleanBrightnessEffect(Mat src,Size kernelSize,Point anchor){
         Mat gray = new Mat();
-        Mat threshold = new Mat();
+        Mat invertedGray = new Mat();
         Mat dst = new Mat();
+        Mat compensationMat = new Mat();
+        Mat reductionMat = new Mat();
+        //Mat mergedMat = new Mat();
         Mat grayBackground =  new Mat();
-        //Point anchor = new Point(5,5);
-        Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
-        //Core.bitwise_not(gray,gray);
-        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_gray_0.jpg",gray);
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,kernelSize,anchor);
-        //Imgproc.erode(gray,grayBackground,kernel,anchor,10);
+        Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
+        //对较亮区域进行降光处理，较暗区域基本不变
         Imgproc.dilate(gray,grayBackground,kernel,anchor,10);
-        //Core.bitwise_not(grayBackground,grayBackground);
-        //imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_dilate_0.jpg",grayBackground);
-        //Imgproc.blur(grayBackground,grayBackground,new Size(4,4),anchor);
-        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_grayBackGround_0.jpg",grayBackground);
         Scalar avgBrightness = Core.mean(grayBackground);
-        Core.subtract(grayBackground,avgBrightness,grayBackground);
-
-        //Imgproc.morphologyEx(gray,grayBackground,Imgproc.MORPH_OPEN,kernel);
-        //Imgproc.erode(grayBackground,grayBackground,kernel);
-        //Imgproc.dilate(grayBackground,grayBackground,kernel);
-        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_grayBackGround_1.jpg",grayBackground);
-        //Core.subtract(gray,grayBackground,dst);
-        Imgproc.cvtColor(grayBackground,grayBackground,Imgproc.COLOR_GRAY2BGR);
-        Core.subtract(src,grayBackground,dst);
+        Core.subtract(grayBackground,avgBrightness,reductionMat);
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_reductionMat_0.jpg",reductionMat);
+        Imgproc.cvtColor(reductionMat,reductionMat,Imgproc.COLOR_GRAY2BGR);
+        Core.subtract(src,reductionMat,dst);
+        //反转原图片，对较暗区域进行光照补偿，较亮区域基本不变
+        Core.bitwise_not(gray,invertedGray);
+        Imgproc.erode(invertedGray,grayBackground,kernel,anchor,10);
+        Scalar invertedAvgBrightness = Core.mean(grayBackground);
+        Core.subtract(grayBackground,invertedAvgBrightness,compensationMat);
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_compensationMat_0.jpg",compensationMat);
+        //Core.subtract(compensationMat,reductionMat,mergedMat);
+        Imgproc.cvtColor(compensationMat,compensationMat,Imgproc.COLOR_GRAY2BGR);
+        Core.add(dst,compensationMat,dst);
         return dst;
 
     }
