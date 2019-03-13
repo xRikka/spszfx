@@ -377,16 +377,40 @@ public class ImgUtil {
         return null;
     }
 
-    //调整整体亮度趋于150
-    public static Mat  averageBrightness(Mat roi){
+    //调整整体亮度趋于指定数值
+    public static Mat  averageBrightness(Mat src){
         Mat dst = new Mat();
-        Imgproc.cvtColor(roi,dst,Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(src,dst,Imgproc.COLOR_BGR2GRAY);
         Scalar light_avg = Core.mean(dst);
         //平均亮度值与指定值的差值
         int r = (int)(150 - light_avg.val[0]);
         //设置亮度调整的beta值
         Scalar light_r = new Scalar(r,r,r);
-        Core.add(roi,light_r,dst);
+        Core.add(src,light_r,dst);
+        return dst;
+    }
+
+    /**
+     * 背景归一化处理
+     * 经过平均亮度调整及处理光照不均后，若像素点的三通道（RGB）都在145-155之间，则判定此像素点为背景像素点
+     * @param src
+     * @return
+     */
+    public static Mat normalizeBackground(Mat src){
+        Mat dst = new Mat();
+        src.copyTo(dst);
+        System.out.println();
+        for(int row = 0;row < dst.rows();row++){
+            Mat rowRange = src.rowRange(row, row + 1);
+            double[] mean = Core.mean(rowRange).val;
+            System.out.print(mean[0]+";;"+mean[1]+";;"+mean[2] + " ");
+            if(mean[0] >=145 && mean[0] <= 155 && mean[1] >=145 && mean[1] <= 155 && mean[2] >=145 && mean[2] <= 155){
+                for(int col = 0;col < dst.cols();col++){
+                    dst.put(row,col,255,255,255);
+                }
+            }
+        }
+        System.out.println();
         return dst;
     }
 

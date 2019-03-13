@@ -178,15 +178,15 @@ public class Test {
             roi = ImgUtil.averageBrightness(srcImgList.get(i));
             Mat Brightness = ImgUtil.cleanBrightnessEffect(roi,new Size(12,12),new Point(5,5));
             IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\brightness_test_"+i+".jpg",Brightness);
-
-            RGBFeature feature1 = test.featureExtraction.extract(Brightness, 200, 30, 150);
-            System.out.print("Brightness "+i+": ");
+            Mat normalize = ImgUtil.normalizeBackground(Brightness);
+            RGBFeature feature1 = test.featureExtraction.extract(normalize, 200, 30, 150);
+            System.out.print("normalize "+i+": ");
             List<int[]> RGBList1 = feature1.getRGBList();//所有行的RGB平均值
             for(int[] arr : RGBList1){
                 System.out.print((arr[0] * 38 + arr[1] * 75 + arr[2] * 15 >> 7) + ",");
             }
             System.out.println();
-            Mat segment = ImgUtil.kameans_getLinesMask(Brightness,2,5);
+            Mat segment = ImgUtil.kameans_getLinesMask(normalize,2,5);
             IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\kmeans_test_"+i+".jpg",segment);
         }
     }
