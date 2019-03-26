@@ -14,6 +14,7 @@ import org.opencv.imgproc.Imgproc;
 import javax.sound.sampled.Line;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Test {
 
@@ -41,7 +42,7 @@ public class Test {
 //            System.out.println("\nkernel: 12;anchor: "+i+":");
 //            test.test5(new Size(12,12),new Point(i,i));
 //        }
-        test6();
+        test7();
 //        test4();
     }
 
@@ -173,10 +174,12 @@ public class Test {
     public static void test6(){
         Test test = new Test();
         Mat roi = null;
-                List<Mat> srcImgList = IOUtil.readBatchImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\subimages\\");
+        List<Mat> srcImgList = IOUtil.readBatchImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\subimages\\");
         for(int i = 0;i < srcImgList.size();i++){
-            roi = ImgUtil.averageBrightness(srcImgList.get(i));
-            Mat Brightness = ImgUtil.cleanBrightnessEffect(roi,new Size(12,12),new Point(5,5));
+            roi = srcImgList.get(i);
+            roi = ImgUtil.whiteBalance_grayWorld(roi);
+            roi = ImgUtil.averageBrightness(roi);
+            Mat Brightness = ImgUtil.cleanBrightnessEffect(roi,new Size(10,10),new Point(5,5));
             IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\brightness_test_"+i+".jpg",Brightness);
             Mat normalize = ImgUtil.normalizeBackground(Brightness);
             RGBFeature feature1 = test.featureExtraction.extract(normalize, 200, 30, 150);
@@ -188,6 +191,34 @@ public class Test {
             System.out.println();
             Mat segment = ImgUtil.kameans_getLinesMask(normalize,2,5);
             IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\kmeans_test_"+i+".jpg",segment);
+        }
+    }
+
+    public static void test7(){
+        Test test = new Test();
+        Mat roi = null;
+        List<Mat> srcImgList = IOUtil.readBatchImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\subimages\\");
+        for(int i = 0;i < srcImgList.size();i++){
+            roi = srcImgList.get(i);
+            roi = ImgUtil.whiteBalance_grayWorld(roi);
+            roi = ImgUtil.averageBrightness(roi);
+            Mat Brightness = ImgUtil.cleanBrightnessEffect(roi,new Size(10,10),new Point(5,5));
+            IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\brightness_test_"+i+".jpg",Brightness);
+            Mat normalize = ImgUtil.normalizeBackground(Brightness);
+            System.out.println();
+            Mat segment = ImgUtil.kameans_getLinesMask(normalize,2,5);
+            IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\kmeans_test_"+i+".jpg",segment);
+            Map<String,Object> map = ImgUtil.extractFeactures(Brightness,segment,2);
+            if(map != null){
+                List<Mat> items =  (ArrayList<Mat>)map.get("itemList");
+                List<int[]> features = (ArrayList<int[]>)map.get("featureList");
+                System.out.println(i+" 特征值如下：");
+                for(int k = 0;k < (int)map.get("itemCount");k++){
+                    IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\item_test_"+i+"_"+k+".jpg",items.get(k));
+                    int[] feature_arr = features.get(k);
+                    System.out.println("feature "+k+":"+feature_arr[0]+","+feature_arr[1]+","+feature_arr[2]);
+                }
+            }
         }
     }
 

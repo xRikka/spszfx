@@ -5,8 +5,7 @@ import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.opencv.core.CvType.CV_8UC1;
 import static org.opencv.imgcodecs.Imgcodecs.imwrite;
@@ -403,12 +402,19 @@ public class ImgUtil {
         for(int row = 0;row < dst.rows();row++){
             Mat rowRange = src.rowRange(row, row + 1);
             double[] mean = Core.mean(rowRange).val;
-            System.out.print(mean[0]+";;"+mean[1]+";;"+mean[2] + " ");
-            if(mean[0] >=145 && mean[0] <= 155 && mean[1] >=145 && mean[1] <= 155 && mean[2] >=145 && mean[2] <= 155){
+            System.out.print((int)mean[0]+";;"+(int)mean[1]+";;"+(int)mean[2] + "@@");
+            double maxChannel = Math.max(Math.max(mean[0],mean[1]),mean[2]);
+            double minChannel = Math.min(Math.min(mean[0],mean[1]),mean[2]);
+            if( (maxChannel-minChannel) < 10 ){
                 for(int col = 0;col < dst.cols();col++){
-                    dst.put(row,col,255,255,255);
+                    dst.put(row,col,0,0,0);
                 }
             }
+//            if(mean[0] >=145 && mean[0] <= 155 && mean[1] >=145 && mean[1] <= 155 && mean[2] >=145 && mean[2] <= 155){
+//                for(int col = 0;col < dst.cols();col++){
+//                    dst.put(row,col,0,0,0);
+//                }
+//            }
         }
         System.out.println();
         return dst;
@@ -460,6 +466,8 @@ public class ImgUtil {
                 tmp.put(i,j,colorLabel[0],colorLabel[1],colorLabel[2]);
             }
         }
+        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(9,9));
+        Imgproc.morphologyEx(tmp,tmp,Imgproc.MORPH_OPEN,kernel);
         System.out.println("生成掩码矩阵结束！");
         return tmp;
     }
@@ -506,6 +514,51 @@ public class ImgUtil {
 
     public static Mat SegmentByWatershed(Mat src){
         return null;
+    }
+
+    public static Map<String,Object> extractFeactures(Mat src,Mat mask,int itemCount){
+        Mat dst = Mat.zeros(mask.rows(),mask.cols(),CvType.CV_8UC1);
+        Mat hierarchy = new Mat();
+        List<MatOfPoint> contours = new ArrayList<>();
+        //mask.convertTo(mask,CvType.CV_8UC1);
+        //mask.copyTo(dst);
+        for(int row = 0;row < mask.rows();row++){
+            for(int col = 0;col < mask.cols();col++){
+                dst.put(row,col,mask.get(row,col)[0]);
+            }
+        }
+        Imgproc.findContours(dst,contours,hierarchy,Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_SIMPLE);
+        if(contours.size() != itemCount){
+            System.out.println("获取轮廓数量不符！");
+            return null;
+        }
+        List<Mat> itemList = new ArrayList<>();
+        List<int[]> featureList = new ArrayList<>();
+        for(int i = 0;i < contours.size();i++){
+            RotatedRect rect =Imgproc.minAreaRect(new MatOfPoint2f(contours.get(i).toArray()));
+            Point[] points = new Point[4];
+            rect.points(points);
+            int[] x_arr = new int[4];
+            int[] y_arr = new int[4];
+            for(int j = 0;j < points.length;j++){
+                x_arr[j] = (int)points[j].x;
+                y_arr[j] = (int)points[j].y;
+            }
+            //x，y坐标集分别由大到小排序
+            Arrays.sort(x_arr);
+            Arrays.sort(y_arr);
+            int width = x_arr[x_arr.length - 1] - x_arr[0];
+            int height = y_arr[y_arr.length - 1] - y_arr[0];
+            Mat item = new Mat(src,new Rect(x_arr[0],y_arr[0],width,height));
+            double[] rgb = Core.mean(item).val;
+            featureList.add(new int[]{(int)rgb[0],(int)rgb[1],(int)rgb[2]});
+            itemList.add(item);
+        }
+        Map<String,Object> features = new HashMap<>();
+        features.put("itemList",itemList);
+        features.put("featureList",featureList);
+        features.put("itemCount",itemCount);
+        return features;
     }
 
 }
