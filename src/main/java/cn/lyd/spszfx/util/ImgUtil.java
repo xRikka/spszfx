@@ -1,6 +1,9 @@
 package cn.lyd.spszfx.util;
 
 import org.opencv.core.*;
+import org.opencv.dnn.Dnn;
+import org.opencv.features2d.Feature2D;
+import org.opencv.features2d.Features2d;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 
@@ -119,6 +122,10 @@ public class ImgUtil {
         Core.merge(mv,dst);
         IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\whiteBalance\\01.jpg",dst);
         return dst;
+    }
+
+    public static Mat whiteBalance_perfect_Reflector(Mat src){
+        return null;
     }
 
     /**
@@ -417,6 +424,10 @@ public class ImgUtil {
 //            }
         }
         System.out.println();
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\normalizeBackground_"+System.currentTimeMillis()+".jpg",dst);
+        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(9,9));
+        Imgproc.morphologyEx(dst,dst,Imgproc.MORPH_OPEN,kernel);
+        //待改，有问题
         return dst;
     }
 
@@ -472,6 +483,50 @@ public class ImgUtil {
         return tmp;
     }
 
+    public static void kameans_extractFeactures(Mat src,int clusterCount,int attempts){
+        Mat tmp = new Mat();
+        src.copyTo(tmp);
+        int rows = tmp.rows();
+        int cols = tmp.cols();
+        Mat data = new Mat(src.rows() * src.cols(),3,CvType.CV_32FC1);
+        Mat bestLabels = new Mat();
+        for(int i = 0;i < rows;i++){//创建K-Means数据集
+            for(int j = 0;j < cols;j++){
+                double[] sampleValue  = tmp.get(i,j);
+                data.put(i * cols + j,0,sampleValue[0]);
+                data.put(i * cols + j,1,sampleValue[1]);
+                data.put(i * cols + j,2,sampleValue[2]);
+                //System.out.println((i * cols + j)+" data:"+data.get(i * cols + j,0)[0] + ";;sample:" + sample.get(0,0)[0]);
+            }
+        }
+        System.out.println("开始聚类！");
+        Mat centers = new Mat();
+        Core.kmeans(data,clusterCount,bestLabels,new TermCriteria(TermCriteria.EPS+TermCriteria.MAX_ITER,10,0.1)
+                ,attempts,Core.KMEANS_PP_CENTERS,centers);
+        int n = 0;
+        System.out.println("结束聚类，获得聚类中心点有："+ centers.rows());
+        List<double[]> centersList = new ArrayList<>();
+        Mat centers_tmp = Mat.zeros(1,clusterCount,tmp.type());
+        for (int i = 0;i < centers.rows();i++){
+            double[] center = new double[]{centers.get(i,0)[0],centers.get(i,1)[0],centers.get(i,2)[0]};
+            System.out.println(i+":("+center[0]+","+center[1]+","+center[2]+"); ");
+            centersList.add(center);
+            centers_tmp.put(0,i,center);
+        }
+        double[] centers_avg = Core.mean(centers_tmp).val;
+        System.out.println("计算聚类中心均值 Core.mean()：" + "("+centers_avg[0]+","+centers_avg[1]+","+centers_avg[2]+")");
+//        double[] centers_avg2 = new double[3];
+//        for(double[] c : centersList){
+//            centers_avg2[0] = centers_avg2[0] + c[0];
+//            centers_avg2[1] = centers_avg2[1] + c[1];
+//            centers_avg2[2] = centers_avg2[2] + c[2];
+//        }
+//        centers_avg2[0] = centers_avg2[0] / clusterCount;
+//        centers_avg2[1] = centers_avg2[1] / clusterCount;
+//        centers_avg2[2] = centers_avg2[2] / clusterCount;
+//        System.out.println("计算聚类中心均值 List：" + "("+centers_avg2[0]+","+centers_avg2[1]+","+centers_avg2[2]+")");
+    }
+
     /**
      * 处理图片光照不均问题
      * 分两个步骤：
@@ -494,6 +549,7 @@ public class ImgUtil {
         Imgproc.cvtColor(src,gray,Imgproc.COLOR_BGR2GRAY);
         //对较亮区域进行降光处理，较暗区域基本不变
         Imgproc.dilate(gray,grayBackground,kernel,anchor,10);
+        imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_grayBackground_0.jpg",reductionMat);
         Scalar avgBrightness = Core.mean(grayBackground);
         Core.subtract(grayBackground,avgBrightness,reductionMat);
         imwrite("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_reductionMat_0.jpg",reductionMat);
@@ -529,7 +585,7 @@ public class ImgUtil {
         }
         Imgproc.findContours(dst,contours,hierarchy,Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_SIMPLE);
         if(contours.size() != itemCount){
-            System.out.println("获取轮廓数量不符！");
+            System.out.println("size:"+contours.size()+"获取轮廓数量不符！");
             return null;
         }
         List<Mat> itemList = new ArrayList<>();
@@ -549,10 +605,12 @@ public class ImgUtil {
             Arrays.sort(y_arr);
             int width = x_arr[x_arr.length - 1] - x_arr[0];
             int height = y_arr[y_arr.length - 1] - y_arr[0];
-            Mat item = new Mat(src,new Rect(x_arr[0],y_arr[0],width,height));
+            int sub_height = height / 4;
+            Mat item = new Mat(src,new Rect(x_arr[0],y_arr[0] + sub_height,width,height - (sub_height * 2)));
             double[] rgb = Core.mean(item).val;
             featureList.add(new int[]{(int)rgb[0],(int)rgb[1],(int)rgb[2]});
             itemList.add(item);
+            ImgUtil.kameans_extractFeactures(item,10,3);
         }
         Map<String,Object> features = new HashMap<>();
         features.put("itemList",itemList);

@@ -60,7 +60,7 @@ public class CannyEdgeDetector extends EdgeDetector {
         kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(ksize,ksize));
         //保边
         Imgproc.morphologyEx(threshImage,closedImage,Imgproc.MORPH_GRADIENT,kernel);
-        //去小点，暂时没作用
+        //去小点
         Imgproc.morphologyEx(closedImage,closedImage,Imgproc.MORPH_CLOSE,kernel);
         //腐蚀与膨胀，iterator = 4
         Imgproc.erode(closedImage,erodeImage,kernel);
@@ -71,16 +71,18 @@ public class CannyEdgeDetector extends EdgeDetector {
         mask = new Mat(temp.height()+2,temp.width()+2, temp.type(),new Scalar(0));
         dilateImage.copyTo(temp.submat(new Range(1,dilateImage.height() + 1), new Range(1,dilateImage.width() + 1)));
         Imgproc.floodFill(temp,mask,new Point(0,0), new Scalar(255));//大背景漫水填充为白色
+        imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_quyu1_"+count+".jpg",temp);
         Core.bitwise_not(temp,temp);//二值图反转
+        imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_quyu2_"+count+".jpg",temp);
         //二值图与阈值图相加合并，获得蒙版
         Core.bitwise_or(temp.submat(new Range(1,dilateImage.height() + 1), new Range(1,dilateImage.width() + 1)),dilateImage,temimage);
+        imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_quyu3_"+count+".jpg",temimage);
         //蒙版再次腐蚀，去除边缘毛刺
         kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(ksize * 10,ksize * 10));
         Imgproc.erode(temimage,temimage,kernel);
         //定位轮廓
         //temimage.copyTo(temp);
         Imgproc.findContours(temimage,contours,mask,Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_SIMPLE);
-
         //释放内存
         /*
         grayImage.release();
@@ -93,6 +95,7 @@ public class CannyEdgeDetector extends EdgeDetector {
         temp.release();
         mask.release();
 */
+        imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_frame"+count+".jpg",frame);
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_temimage"+count+".jpg",temimage);
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_gray"+count+".jpg",grayImage);
         imwrite(IOUtil.IMAGE_TEMP_PATH+"IMG_TEMP_detectedEdges"+count+".jpg",detectedEdges);

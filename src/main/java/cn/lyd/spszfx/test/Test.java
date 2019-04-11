@@ -29,7 +29,7 @@ public class Test {
     public static void main(String[] args){
         System.load("E:\\IdeaProjects\\spszfx\\opencv\\x64\\opencv_java341.dll");
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-//        Test test = new Test();
+        Test test = new Test();
 //        System.out.println("\nkernel: 4;anchor: 1:");
 //        test.test5(new Size(4,4),new Point(1,1));
 //        System.out.println("\nkernel: 9;anchor: 3:");
@@ -43,7 +43,7 @@ public class Test {
 //            test.test5(new Size(12,12),new Point(i,i));
 //        }
         test7();
-//        test4();
+//        test.test4(new Size(12,12),new Point(5,5));
     }
 
     public static void test1(){
@@ -127,11 +127,13 @@ public class Test {
         }
     }
 
-    public static  void test4(Size kernelSize, Point anchor){
-        Mat src = IOUtil.readImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\subimages\\IMG_roi_4.jpg");
-        Mat result = ImgUtil.cleanBrightnessEffect(src,kernelSize,anchor);
+    public void test4(Size kernelSize, Point anchor){
+        Mat src = IOUtil.readImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\src\\IMG_20181101_215111.jpg");
+        //src = ImgUtil.averageBrightness(src);
+        //Mat result = ImgUtil.cleanBrightnessEffect(src,kernelSize,anchor);
         int i = 0;
-        IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_test_0.jpg",result);
+        RGBFeature feature3 = toDo(src, 200, 30, 150);
+        //IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\cleanBrightnessEffect_test_0.jpg",result);
     }
 
     public void test5(Size kernelSize, Point anchor){
@@ -206,9 +208,11 @@ public class Test {
             IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\brightness_test_"+i+".jpg",Brightness);
             Mat normalize = ImgUtil.normalizeBackground(Brightness);
             System.out.println();
-            Mat segment = ImgUtil.kameans_getLinesMask(normalize,2,5);
-            IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\kmeans_test_"+i+".jpg",segment);
-            Map<String,Object> map = ImgUtil.extractFeactures(Brightness,segment,2);
+            IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\normalize_test_"+i+".jpg",normalize);
+            //Mat segment = ImgUtil.kameans_getLinesMask(normalize,2,5);
+            //IOUtil.writeImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\kmeans_test_"+i+".jpg",segment);
+            //Map<String,Object> map = ImgUtil.extractFeactures(Brightness,segment,2);
+            Map<String,Object> map = ImgUtil.extractFeactures(Brightness,normalize,2);
             if(map != null){
                 List<Mat> items =  (ArrayList<Mat>)map.get("itemList");
                 List<int[]> features = (ArrayList<int[]>)map.get("featureList");
@@ -222,16 +226,18 @@ public class Test {
         }
     }
 
+    public static void test8(){
+        Mat src = IOUtil.readImg("E:\\IdeaProjects\\spszfx\\src\\main\\resources\\static\\images\\test\\item_test_2_0.jpg");
+        ImgUtil.kameans_extractFeactures(src,10,3);
+    }
+
     private RGBFeature toDo(Mat frame,int minPeakDistance, double loUpDiff, double threshold) {
         Mat roi = regionalDetection.toDo(frame);
         Mat dst = new Mat();
         //Mat corrected_roi = horizontalCorrection.degree(roi);
         //调整整体亮度趋于150
-        Imgproc.cvtColor(roi,dst,Imgproc.COLOR_BGR2GRAY);
-        Scalar light_avg = Core.mean(dst);
-        int r = (int)(150 - light_avg.val[0]);
-        Scalar light_r = new Scalar(r,r,r);
-        Core.add(roi,light_r,dst);
+        roi = ImgUtil.averageBrightness(roi);
+        dst = ImgUtil.cleanBrightnessEffect(roi,new Size(12,12),new Point(5,5));
         //光照补偿
         //dst = ImgUtil.lightingCompensation(dst);//对数变换
         //dst = ImgUtil.lightingCompensation(dst,5);
